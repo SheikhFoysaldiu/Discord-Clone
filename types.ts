@@ -5,5 +5,5 @@ type MemberWithProfiles = Member & {
 };
 
 export type ServerWithMembersWithProfiles = Server & {
-  members: MemberWithProfiles[];
+  member: MemberWithProfiles[];
 };
