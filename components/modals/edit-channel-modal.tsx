@@ -26,7 +26,7 @@ import {
 
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { useParams, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 import { ChannelType } from "@prisma/client";
 import {
@@ -36,11 +36,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
-
 import { SelectContent } from "@radix-ui/react-select";
 import { useModal } from "@/hooks/use-model-store";
 
-interface createChannelModalProps {}
+interface editChannelModalProps {}
 const formSchema = z.object({
   name: z
     .string()
@@ -53,42 +52,42 @@ const formSchema = z.object({
   type: z.nativeEnum(ChannelType),
 });
 
-const CreateChannelModal: FC<createChannelModalProps> = () => {
+const EditChannelModal: FC<editChannelModalProps> = () => {
   const { isOpen, onClose, type, data } = useModal();
   const router = useRouter();
-  const params = useParams();
 
-  const isModalOpen = isOpen && type === "createChannel";
-  const { channelType } = data;
+  const isModalOpen = isOpen && type === "editChannel";
+  const { server, channel } = data;
 
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: "",
-      type: channelType || ChannelType.TEXT,
+      type: channel?.type || ChannelType.TEXT,
     },
   });
 
   useEffect(() => {
-    if (channelType) {
-      form.setValue("type", channelType);
-    } else {
-      form.setValue("type", ChannelType.TEXT);
+    console.log(channel);
+
+    if (channel) {
+      form.setValue("name", channel.name);
+      form.setValue("type", channel.type);
     }
-  }, [channelType, form]);
+  }, [channel, form]);
 
   const isLoading = form.formState.isSubmitting;
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       const url = qs.stringifyUrl({
-        url: `/api/channels`,
+        url: `/api/channels/${channel?.id}`,
         query: {
-          serverId: params?.serverId,
+          serverId: server?.id,
         },
       });
 
-      await axios.post(url, values);
+      await axios.patch(url, values);
 
       form.reset();
 
@@ -106,7 +105,7 @@ const CreateChannelModal: FC<createChannelModalProps> = () => {
       <DialogContent className="bg-white text-black p-0 overflow-hidden">
         <DialogHeader className="pt-8 px-6">
           <DialogTitle className="text-2xl text-center font-bold">
-            Create Channel
+            Edit Channel
           </DialogTitle>
         </DialogHeader>
         <Form {...form}>
@@ -121,6 +120,7 @@ const CreateChannelModal: FC<createChannelModalProps> = () => {
                       Channel Name
                     </FormLabel>
                     <FormControl>
+                      {/* @ts-ignore */}
                       <Input
                         disabled={isLoading}
                         className="bg-zinc-300/50 border-0 focus-visible:ring-0 text-black focus-visible:ring-offset-0"
@@ -144,6 +144,7 @@ const CreateChannelModal: FC<createChannelModalProps> = () => {
                       defaultValue={field.value}
                     >
                       <FormControl>
+                        {/* @ts-ignore */}
                         <SelectTrigger className="bg-zinc-300/50 border-0 focus:ring-0 text-black ring-offset-0 focus:ring-offset-0 capitalize outline-none">
                           <SelectValue placeholder="Select a channel type" />
                         </SelectTrigger>
@@ -169,7 +170,7 @@ const CreateChannelModal: FC<createChannelModalProps> = () => {
             </div>
             <DialogFooter className="bg-gray-100 px-6 py-4">
               <Button variant="primary" disabled={isLoading}>
-                Create
+                Save
               </Button>
             </DialogFooter>
           </form>
@@ -179,4 +180,4 @@ const CreateChannelModal: FC<createChannelModalProps> = () => {
   );
 };
 
-export default CreateChannelModal;
+export default EditChannelModal;

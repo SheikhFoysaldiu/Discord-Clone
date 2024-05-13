@@ -1,4 +1,4 @@
-import { ServerSidebar } from "@/components/server/server-sidebar";
+import ServerSidebar from "@/components/server/server-sidebar";
 import { useCurrentProfile } from "@/hooks/use-current-profile";
 import { findServer } from "@/lib/servers/actions";
 import { redirect } from "next/navigation";

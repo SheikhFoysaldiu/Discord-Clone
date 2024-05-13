@@ -50,7 +50,6 @@ export function InitialModal() {
 
       form.reset();
       router.refresh();
-      window.location.reload();
     } catch (error) {
       console.error(error);
     }

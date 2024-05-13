@@ -58,8 +58,8 @@ export function EditServerModal() {
       await axios.patch(`/api/servers/${server?.id}`, values);
 
       form.reset();
-      router.refresh();
       onClose();
+      router.refresh();
     } catch (error) {
       console.error(error);
     }
