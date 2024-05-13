@@ -1,38 +1,51 @@
-import { NextRequest, NextResponse } from 'next/server';
-
-import { getCurrentProfile } from '@/lib/profiles/actions';
+import { currentProfile } from '@/lib/current-profile';
 import { db } from '@/lib/db';
+import { NextResponse } from 'next/server';
 
-interface Params {
-  serverId: string;
+export async function DELETE(
+  req: Request,
+  { params }: { params: { serverId: string } }
+) {
+  try {
+    const profile = await currentProfile();
+
+    if (!profile) return new NextResponse('Unauthorized', { status: 401 });
+
+    const server = await db.server.delete({
+      where: {
+        id: params.serverId,
+        profileId: profile.id,
+      },
+    });
+
+    return NextResponse.json(server);
+  } catch (error) {
+    console.log(error);
+    return new NextResponse('Internal Error', { status: 500 });
+  }
 }
 
-export async function PATCH(req: NextRequest, { params }: { params: Params }) {
+export async function PATCH(
+  req: Request,
+  { params }: { params: { serverId: string } }
+) {
   try {
+    const profile = await currentProfile();
     const { name, imageUrl } = await req.json();
-    const profile = await getCurrentProfile();
 
-    if (!profile) {
-      return new NextResponse('Unauthorized', { status: 401 });
-    }
-
-    if (!params.serverId) {
-      return new NextResponse('Bad Request', { status: 400 });
-    }
+    if (!profile) return new NextResponse('Unauthorized', { status: 401 });
 
     const server = await db.server.update({
       where: {
         id: params.serverId,
         profileId: profile.id,
       },
-      data: {
-        name,
-        imageUrl,
-      },
+      data: { name, imageUrl },
     });
 
     return NextResponse.json(server);
   } catch (error) {
+    console.log(error);
     return new NextResponse('Internal Error', { status: 500 });
   }
 }
