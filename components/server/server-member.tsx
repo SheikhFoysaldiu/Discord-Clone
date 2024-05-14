@@ -25,7 +25,7 @@ const ServerMember: FC<serverMemberProps> = ({ member, server }) => {
   const icon = roleIconMap[member.role];
 
   const onClick = () => {
-    router.push(`/servers/${params?.serverId}/conversations/${member.id}`);
+    router.push(`/server/${params?.serverId}/conversation/${member.id}`);
   };
   return (
     <button
