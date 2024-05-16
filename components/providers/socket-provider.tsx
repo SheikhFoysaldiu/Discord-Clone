@@ -37,6 +37,7 @@ export const SocketProvider = ({ children }: { children: ReactNode }) => {
         addTrailingSlash: false,
       }
     );
+    console.log("Socket instance", socketInstance);
 
     socketInstance.on("connect", () => {
       console.log("Connected to socket server");

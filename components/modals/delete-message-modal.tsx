@@ -38,7 +38,7 @@ const DeleteMessageModal: FC<DeleteMessageModalProps> = ({}) => {
 
       onClose();
     } catch (error) {
-      console.log(error);
+      console.log("Error", error);
     } finally {
       setIsLoading(false);
     }

@@ -49,7 +49,7 @@ const ChatInput: FC<ChatInputProps> = ({ apiUrl, name, query, type }) => {
       form.reset();
       router.refresh();
     } catch (error) {
-      console.log(error);
+      console.log("Error", error);
     }
   };
   return (

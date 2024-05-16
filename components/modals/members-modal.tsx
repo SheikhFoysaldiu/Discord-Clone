@@ -72,7 +72,7 @@ const MembersModal: FC<membersModalProps> = ({}) => {
       router.refresh();
       onOpen("members", { server: response.data });
     } catch (error) {
-      console.log(error);
+      console.log("Error", error);
     } finally {
       setLoadingId("");
     }

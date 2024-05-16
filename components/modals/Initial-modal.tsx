@@ -51,7 +51,7 @@ export function InitialModal() {
       form.reset();
       router.refresh();
     } catch (error) {
-      console.error(error);
+      console.log("Error", error);
     }
   }
 

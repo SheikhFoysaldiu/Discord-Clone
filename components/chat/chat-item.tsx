@@ -93,7 +93,7 @@ const ChatItem: FC<ChatItemProps> = ({
       form.reset();
       setIsEditing(false);
     } catch (error) {
-      console.log(error);
+      console.log("Error", error);
     }
   };
 

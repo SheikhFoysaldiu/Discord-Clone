@@ -20,7 +20,7 @@ export async function DELETE(
 
     return NextResponse.json(server);
   } catch (error) {
-    console.log(error);
+   console.log("Error", error);
     return new NextResponse('Internal Error', { status: 500 });
   }
 }
@@ -45,7 +45,7 @@ export async function PATCH(
 
     return NextResponse.json(server);
   } catch (error) {
-    console.log(error);
+    console.log("Error", error);
     return new NextResponse('Internal Error', { status: 500 });
   }
 }
